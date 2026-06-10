@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 class Users
 {
     private $conn;
@@ -13,8 +15,13 @@ class Users
     // CREATE
     public function create($username, $email, $asal, $password)
     {
+        $username_esc = $this->conn->real_escape_string($username);
+        $email_esc = $this->conn->real_escape_string($email);
+        $asal_esc = $this->conn->real_escape_string($asal);
+        $password_esc = $this->conn->real_escape_string($password);
+
         $sql = "INSERT INTO $this->table (username, email, asal, password) 
-                VALUES ('$username', '$email', '$asal', '$password')";
+                VALUES ('$username_esc', '$email_esc', '$asal_esc', '$password_esc')";
 
         if ($this->conn->query($sql)) {
             echo "Data berhasil ditambahkan <br>";
@@ -24,20 +31,30 @@ class Users
     }
 
     public function login($username, $password){
+        $username_esc = $this->conn->real_escape_string($username);
+        $password_esc = $this->conn->real_escape_string($password);
 
-    $sql = "SELECT * FROM " . $this->table . 
-    " WHERE username = '$username' 
-    AND password = '$password'";
+        $sql = "SELECT * FROM " . $this->table . " WHERE username = '$username_esc' AND password = '$password_esc'";
+        $result = $this->conn->query($sql);
 
-    $result = $this->conn->query($sql);
-
-    if($result->num_rows > 0){
-        echo "Selamat Datang " . $username;
-        echo "<br>";
-        echo "Login berhasil";
-    } else { 
-        echo "Username atau password salah";
-
+        if($result->num_rows > 0){
+            echo "Selamat Datang " . $username;
+            echo "<br>";
+            echo "Login berhasil";
+        } else { 
+            echo "Username atau password salah";
+        }
     }
-}
+
+    public function getAllUsers(){
+        $sql = "SELECT * FROM $this->table";
+        $result = $this->conn->query($sql);
+        $users = [];
+        if ($result) {
+            while($row = $result->fetch_assoc()){
+                $users[] = $row;
+            }
+        }
+        return $users;
+    }
 }
