@@ -1,9 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+
 class Users
 {
+
     private $conn;
     private $table = "users";
 
@@ -12,49 +11,51 @@ class Users
         $this->conn = $conn;
     }
 
-    // CREATE
+    // REGISTER
     public function create($username, $email, $asal, $password)
     {
-        $username_esc = $this->conn->real_escape_string($username);
-        $email_esc = $this->conn->real_escape_string($email);
-        $asal_esc = $this->conn->real_escape_string($asal);
-        $password_esc = $this->conn->real_escape_string($password);
-
-        $sql = "INSERT INTO $this->table (username, email, asal, password) 
-                VALUES ('$username_esc', '$email_esc', '$asal_esc', '$password_esc')";
+        $sql = "INSERT INTO $this->table (Username, Email, Asal, Password)
+                VALUES ('$username', '$email', '$asal', '$password')";
 
         if ($this->conn->query($sql)) {
-            echo "Data berhasil ditambahkan <br>";
+            return true;
         } else {
-            echo "Error: " . $this->conn->error;
+            return false;
         }
     }
 
-    public function login($username, $password){
-        $username_esc = $this->conn->real_escape_string($username);
-        $password_esc = $this->conn->real_escape_string($password);
+    
+    public function login($username, $password)
+    {
+        $sql = "SELECT * FROM $this->table
+                WHERE username = '$username'
+                AND password = '$password'";
 
-        $sql = "SELECT * FROM " . $this->table . " WHERE username = '$username_esc' AND password = '$password_esc'";
         $result = $this->conn->query($sql);
 
-        if($result->num_rows > 0){
-            echo "Selamat Datang " . $username;
-            echo "<br>";
-            echo "Login berhasil";
-        } else { 
-            echo "Username atau password salah";
+        if ($result && $result->num_rows > 0) {
+            return true;
         }
-    }
 
-    public function getAllUsers(){
+        return false;
+    }
+    public function getAllUsers()
+    {
         $sql = "SELECT * FROM $this->table";
         $result = $this->conn->query($sql);
-        $users = [];
-        if ($result) {
-            while($row = $result->fetch_assoc()){
-                $users[] = $row;
-            }
+
+        if ($result ->num_rows > 0) {
+            return $result;
+        } else {
+            return false;
         }
-        return $users;
+
+        
+    }
+    public function hapus($id){
+        $sql = "DELETE FROM $this->table WHERE id = " . $id;
+        $result = $this->conn->query($sql);
+        return $result;
     }
 }
+?>

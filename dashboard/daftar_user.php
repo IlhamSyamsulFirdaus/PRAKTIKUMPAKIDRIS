@@ -1,46 +1,49 @@
 <?php
-require_once __DIR__ . '/../database.php';
-require_once __DIR__ . '/../users.php';
+include '../users.php';
+include '../database.php';
 
 $db = new Database();
 $conn = $db->connect();
-$users_obj = new Users($conn);
-$daftar_users = $users_obj->getAllUsers();
+$users = new Users($conn);
+
+$result = $users->getAllUsers();
+$daftar_users = [];
+
+if ($result && $result->num_rows > 0) {
+    $daftar_users = $result->fetch_all(MYSQLI_ASSOC);
+}
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Daftar User</h1>
-          </div>
+<h1>Daftar User</h1>
+<hr />
+<a href="index.php?halaman=tambah_user_form.php" class="btn btn-primary mb-3">Tambah User</a>
           <div class="table-responsive small">
-            <table class="table table-striped table-sm align-middle">
+            <table class="table table-striped table-sm"> 
               <thead>
                 <tr>
                   <th scope="col">ID</th>
-                  <th scope="col">Username</th>
+                  <th scope="col">username</th>
                   <th scope="col">Email</th>
                   <th scope="col">Asal</th>
-                  <th scope="col" style="width: 150px;">Aksi</th>
+                  <th scope="col">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <?php if (!empty($daftar_users)): ?>
-                  <?php foreach ($daftar_users as $row): ?>
-                    <tr>
-                      <td><?php echo htmlspecialchars($row['id'] ?? ''); ?></td>
-                      <td><strong><?php echo htmlspecialchars($row['username'] ?? ''); ?></strong></td>
-                      <td><?php echo htmlspecialchars($row['email'] ?? ''); ?></td>
-                      <td><?php echo htmlspecialchars($row['asal'] ?? ''); ?></td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1" title="Edit User">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger" title="Hapus User">Hapus</button>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                <?php else: ?>
-                  <tr>
-                    <td colspan="5" class="text-center py-3 text-muted">Belum ada data user. Silakan lakukan pendaftaran terlebih dahulu.</td>
-                  </tr>
-                <?php endif; ?>
+              <?php 
+              foreach ($daftar_users as $user) {
+                ?>
+                <tr> 
+                  <td><?= $user['id'] ?></td>
+                  <td><?= $user['username'] ?></td>
+                  <td><?= $user['email'] ?></td>
+                  <td><?= $user['asal'] ?></td>
+                  <td>
+                   <a href="delete_user.php?id=<?= $user['id'] ?>"> delete</a> | edit 
+              </td>
+              </tr>
+                 <?php
+                 } 
+                 ?>
               </tbody>
             </table>
           </div>

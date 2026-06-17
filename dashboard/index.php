@@ -1,14 +1,16 @@
 <?php
 session_start();
-if (!isset($_SESSION['username']) || !isset($_SESSION['is_logged_in'])) {
-    header("Location: ../index.html");
-    exit();
+
+if(!isset($_SESSION['is_logged_in'])) {
+  header("Location: ../index.php");
+  exit;
 }
 
+$halaman = $_GET['halaman'] ?? 'daftar_user.php';
 
 
-$username = htmlspecialchars($_SESSION['username']);
 ?>
+
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head>
@@ -21,13 +23,9 @@ $username = htmlspecialchars($_SESSION['username']);
     />
     <meta name="generator" content="Astro v5.13.2" />
     <title>Dashboard Template · Bootstrap v5.3</title>
-    <link
-      rel="canonical"
-      href="https://getbootstrap.com/docs/5.3/examples/dashboard/"
-    />
-    <script src="../assets/js/color-modes.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="../assets/js/color-modes.js"></script>
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet" />
     <meta name="theme-color" content="#712cf9" />
     <link href="dashboard.css" rel="stylesheet" />
     <style>
@@ -296,7 +294,7 @@ $username = htmlspecialchars($_SESSION['username']);
       <a
         class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white"
         href="#"
-        >Sistem Informasi</a
+        >Company name</a
       >
       <ul class="navbar-nav flex-row d-md-none">
         <li class="nav-item text-nowrap">
@@ -338,12 +336,6 @@ $username = htmlspecialchars($_SESSION['username']);
           aria-label="Search"
         />
       </div>
-      <div class="navbar-nav">
-        <div class="nav-item text-nowrap d-flex align-items-center">
-          <span class="nav-link px-3 text-light">Halo, <?php echo $username; ?></span>
-          <a class="nav-link px-3 text-danger" href="../logout.php">Sign out</a>
-        </div>
-      </div>
     </header>
     <div class="container-fluid">
       <div class="row">
@@ -358,7 +350,7 @@ $username = htmlspecialchars($_SESSION['username']);
           >
             <div class="offcanvas-header">
               <h5 class="offcanvas-title" id="sidebarMenuLabel">
-                Sistem Informasi
+                Company name
               </h5>
               <button
                 type="button"
@@ -385,37 +377,24 @@ $username = htmlspecialchars($_SESSION['username']);
                   </a>
                 </li>
                 
-               
+                
+                
+                
                 <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2" href="#">
+                  <a class="nav-link d-flex align-items-center gap-2" href="index.php">
                     <svg class="bi" aria-hidden="true">
-                      <use xlink:href="#people"></use>
+                      <use xlink:href="#puzzle"></use>
                     </svg>
-                    Daftar User
+                    daftar user
                   </a>
                 </li>
-                
-                
               </ul>
-              <h6
-                class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase"
-              >
-                <span>Saved reports</span>
-                <a
-                  class="link-secondary"
-                  href="#"
-                  aria-label="Add a new report"
-                >
-                  <svg class="bi" aria-hidden="true">
-                    <use xlink:href="#plus-circle"></use>
-                  </svg>
-                </a>
-              </h6>
-             
+              
+              </ul>
               <hr class="my-3" />
               <ul class="nav flex-column mb-auto">
                 <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2" href="#">
+                  <a class="nav-link d-flex align-items-center gap-2" href="#"> 
                     <svg class="bi" aria-hidden="true">
                       <use xlink:href="#gear-wide-connected"></use>
                     </svg>
@@ -434,17 +413,21 @@ $username = htmlspecialchars($_SESSION['username']);
             </div>
           </div>
         </div>
-        
-      <?php 
-      include 'daftar_user.php'; ?>
-
+        <?php
+          include $halaman;
+          ?>
       </div>
     </div>
+    <script
+      src="../assets/dist/js/bootstrap.bundle.min.js"
+      class="astro-vvvwv3sm"
+    ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
       integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp"
       crossorigin="anonymous"
+      class="astro-vvvwv3sm"
     ></script>
-    <script src="dashboard.js"></script>
+    <script src="dashboard.js" class="astro-vvvwv3sm"></script>
   </body>
 </html>

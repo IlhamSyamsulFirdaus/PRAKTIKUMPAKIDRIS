@@ -1,44 +1,48 @@
 <?php
+
 require_once "database.php";
 require_once "users.php";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $Username = $_POST["username"] ?? '';
-    $Email = $_POST["email"] ?? '';
-    $Asal = $_POST["asal"] ?? '';
-    $Password = $_POST["password"] ?? '';
-    $Password_Ulang = $_POST["password_ulang"] ?? '';
+$username = $_POST["username"] ?? "";
+$email = $_POST["email"] ?? "";
+$asal = $_POST["asal"] ?? "";
+$password = $_POST["password"] ?? "";
+$password_ulang = $_POST["password_ulang"] ?? "";
 
-    if (isset($_POST["saya_setuju"])) {
-        if ($Password !== $Password_Ulang) {
-            echo "Error: Ulangi password dengan benar! Password tidak cocok.<br>";
-            echo "<a href='Sign_Up.html'>Kembali ke Form Registrasi</a>";
-            exit;
-        }
+if (isset($_POST["setuju"])) {
+
+    echo "Anda telah menyetujui form <br>";
+
+    if ($password == $password_ulang) {
 
         $database = new Database();
         $conn = $database->connect();
-        
-        $users = new Users($conn);
-        
-        // Cek apakah username / email sudah terdaftar
-        $check_sql = "SELECT * FROM users WHERE username = '" . $conn->real_escape_string($Username) . "' OR email = '" . $conn->real_escape_string($Email) . "'";
-        $check_res = $conn->query($check_sql);
-        if ($check_res && $check_res->num_rows > 0) {
-            echo "Error: Username atau Email sudah terdaftar!<br>";
-            echo "<a href='Sign_Up.html'>Kembali ke Form Registrasi</a>";
-            exit;
+
+        $user = new users($conn);
+
+        $success = $user->create(
+            $username,
+            $email,
+            $asal,
+            $password
+        );
+
+        if ($success) {
+            echo "Pendaftaran berhasil! <a href='index.php'>Kembali ke Halaman Login</a>";
+        } else {
+            echo "Pendaftaran gagal! <a href='Sign_Up.html'>Kembali ke Form Registrasi</a>";
         }
 
-        // Simpan data
-        $users->create($Username, $Email, $Asal, $Password);
-        
-        echo "<br>Pendaftaran berhasil! <a href='index.html'>Kembali ke Halaman Login</a>";
     } else {
-        echo "Anda harus menyetujui syarat dan ketentuan.<br>";
-        echo "<a href='Sign_Up.html'>Kembali ke Form Registrasi</a>";
+
+        echo "Password tidak sama <a href='Sign_Up.html'>Kembali ke Form Registrasi</a>";
+
     }
+
 } else {
-    header("Location: Sign_Up.html");
-    exit;
+
+    echo "Anda harus menyetujui form <a href='Sign_Up.html'>Kembali ke Form Registrasi</a>";
+
 }
+
+?>
