@@ -16,7 +16,7 @@ session_start();
     </head>
     <body>
         <div class="w-25 h-75 .bg-secondary-subtle p-5 m-5 border border-2 border-danger rounded rounded-3">
-            <form action="Login.php" method="post">
+            <form action="login.php" method="post">
                 <h1 class="mb-2">login form</h1>
                 <?php
                 if (isset($_SESSION['pesan_kesalahan'])) {

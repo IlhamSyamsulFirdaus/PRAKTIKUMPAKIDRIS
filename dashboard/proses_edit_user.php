@@ -3,6 +3,7 @@
 require_once "../database.php";
 require_once "../users.php";
 
+$id = $_POST["id"];
 $username = $_POST["username"];
 $email = $_POST["email"];
 $asal = $_POST["asal"];
@@ -12,7 +13,7 @@ $password = $_POST["password"];
         $conn = $database->connect();
 
         $user = new users($conn);
-        $user->create($username, $email, $asal, $password);
+        $user->update($id, $username, $email, $asal, $password);
 
-        header("location: index.php?halaman=daftar_user.php");
+        header("location: index.php");
 ?>

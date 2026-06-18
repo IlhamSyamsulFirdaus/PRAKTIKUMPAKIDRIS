@@ -11,7 +11,6 @@ class Users
         $this->conn = $conn;
     }
 
-    // REGISTER
     public function create($username, $email, $asal, $password)
     {
         $sql = "INSERT INTO $this->table (Username, Email, Asal, Password)
@@ -56,6 +55,26 @@ class Users
         $sql = "DELETE FROM $this->table WHERE id = " . $id;
         $result = $this->conn->query($sql);
         return $result;
+    }
+    public function ambilUserById($id){
+        $sql = "SELECT * FROM $this->table WHERE id =" . $id;
+        $result = $this->conn->query($sql);
+        return $result->fetch_assoc();
+    }
+    public function getUserById($id){
+        $sql = "SELECT * FROM $this->table WHERE id =" . $id;
+        $result = $this->conn->query($sql);
+        return $result;
+    }
+    public function update($id, $username, $email, $asal, $password){
+    $sql = "UPDATE $this->table SET
+    username='".$username."', email='".$email."',
+    asal='".$asal."',
+    password='".$password."'
+    WHERE id='".$id."'";
+
+    $result = $this->conn->query($sql);
+    return $result;
     }
 }
 ?>
