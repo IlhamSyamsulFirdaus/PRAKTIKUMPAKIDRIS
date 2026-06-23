@@ -8,9 +8,7 @@ if(!isset($_SESSION['is_logged_in'])) {
 
 $halaman = $_GET['halaman'] ?? 'daftar_user.php';
 
-
 ?>
-
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head>
@@ -385,7 +383,7 @@ $halaman = $_GET['halaman'] ?? 'daftar_user.php';
                     <svg class="bi" aria-hidden="true">
                       <use xlink:href="#puzzle"></use>
                     </svg>
-                    daftar user
+                    Daftar user
                   </a>
                 </li>
               </ul>

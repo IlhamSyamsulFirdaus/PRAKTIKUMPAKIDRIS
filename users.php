@@ -76,5 +76,14 @@ class Users
     $result = $this->conn->query($sql);
     return $result;
     }
+    public function hitungLogin($username) {
+    $sql_update = "UPDATE users SET login_count = login_count + 1 WHERE username = '" . $username . "'";
+    $this->conn->query($sql_update);
+    $sql_select = "SELECT login_count FROM users WHERE username = '" . $username . "'";
+    $result = $this->conn->query($sql_select);
+    $row = $result->fetch_assoc();
+
+    return $row['login_count'];
+}
 }
 ?>
